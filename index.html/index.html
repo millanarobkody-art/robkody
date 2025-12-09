@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RKPROKILLER Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <video autoplay loop muted playsinline class="bg-video">
+    <source src="1687451408-1687451408-madara-uchiha-rampage-4k-live-wallpaper.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <div class="form-box">
+      <h2 class="glow-text">
+        <span class="red-letter">A</span>
+        <span class="white-letter">R</span>
+        <span class="white-letter">I</span>
+        <span class="white-letter">S</span>
+        <span class="white-letter">E</span>
+      </h2>
+
+      <input type="text" id="login-username" placeholder="Enter your name">
+      <input type="password" id="login-password" placeholder="Enter your password">
+
+      <p class="forgot-pass" onclick="forgotPass()">Forgot Password?</p>
+
+      <button class="glow-button" onclick="login()">ARISE</button>
+      <button class="glow-button" onclick="goToSignIn()">SIGN IN</button>
+
+      <p id="login-message" class="message"></p>
+
+      <div id="forgot-box" class="forgot-box">
+        <h3>Reset Password</h3>
+        <input type="text" id="forgotUser" placeholder="Enter username">
+        <button onclick="sendReset()">Send Reset</button>
+        <button onclick="closeForgot()">Close</button>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="music-btn" onclick="toggleMusic()"></div>
+
+  <audio id="bgMusic" src="ytmp3free.cc_shiro-sagisu-treachery-lyrics-youtubemp3free.org.mp3" loop></audio>
+  <audio id="successSound" src="anime-shine-sound-effect-346114.mp3" preload="auto"></audio>
+  <audio id="errorSound" src="d-a-t-t-e-b-a-y-o-meme-audiotrimmer.mp3" preload="auto"></audio>
+
+  <script src="login.js"></script>
+  <script src="script.js"></script>
+</body>
+
+<script>
+const clickSounds = [
+    new Audio("THIS IS THE END - AUDIO FROM JAYUZUMI.COM.mp3"),
+    new Audio("THERE IS NO HOPE - AUDIO FROM JAYUZUMI.COM.mp3"),
+    new Audio("JUST ONE LAST THING - AUDIO FROM JAYUZUMI.COM.mp3"),
+    new Audio("DROWN IN DESPAIR - AUDIO FROM JAYUZUMI.COM.mp3")
+];
+
+let currentClick = 0;
+let isClickPlaying = false;
+
+document.addEventListener("click", function(e) {
+   
+    if (e.target.tagName.toLowerCase() === "button" || e.target.classList.contains("music-btn")) return;
+
+    if (isClickPlaying) return;
+
+    const sound = clickSounds[currentClick];
+    isClickPlaying = true;
+    sound.currentTime = 0;
+    sound.play();
+
+    sound.onended = () => {
+        isClickPlaying = false;
+        currentClick++;
+        if (currentClick >= clickSounds.length) currentClick = 0; 
+    };
+});
+</script>
+
+</html>
