@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RKPROKILLER Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <video autoplay loop muted playsinline class="bg-video">
+    <source src="1687451408-1687451408-madara-uchiha-rampage-4k-live-wallpaper.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <div class="form-box">
+
+      <h2 class="glow-text">
+        <span class="red-letter">A</span>
+        <span class="white-letter">R</span>
+        <span class="white-letter">I</span>
+        <span class="white-letter">S</span>
+        <span class="white-letter">E</span>
+      </h2>
+
+      <!-- LOGIN FORM -->
+      <input type="text" id="login-username" placeholder="Enter your name">
+      <input type="password" id="login-password" placeholder="Enter your password">
+
+      <p class="forgot-pass" onclick="forgotPass()">Forgot Password?</p>
+
+      <button class="glow-button" onclick="login()">ARISE</button>
+      <button class="glow-button" onclick="showSignInForm()">SIGN IN</button>
+
+      <p id="login-message" class="message"></p>
+
+      <!-- CREATE ACCOUNT FORM -->
+      <div id="signin-box" class="signin-box" style="display:none;">
+        <h3>Create Account</h3>
+        <input type="text" id="new-username" placeholder="New username">
+        <input type="password" id="new-password" placeholder="New password">
+        <button onclick="register()">Create</button>
+        <button onclick="closeSignInForm()">Close</button>
+      </div>
+
+      <!-- FORGOT PASSWORD BOX -->
+      <div id="forgot-box" class="forgot-box">
+        <h3>Reset Password</h3>
+        <input type="text" id="forgotUser" placeholder="Enter username">
+        <button onclick="sendReset()">Send Reset</button>
+        <button onclick="closeForgot()">Close</button>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="music-btn" onclick="toggleMusic()"></div>
+
+  <!-- AUDIO -->
+  <audio id="bgMusic" src="ytmp3free.cc_shiro-sagisu-treachery-lyrics-youtubemp3free.org.mp3" loop></audio>
+  <audio id="successSound" src="anime-shine-sound-effect-346114.mp3" preload="auto"></audio>
+  <audio id="errorSound" src="d-a-t-t-e-b-a-y-o-meme-audiotrimmer.mp3" preload="auto"></audio>
+
+  <!-- SCRIPTS -->
+  <script>
+    // --- LOGIN FUNCTION ---
+    function login() {
+        let username = document.getElementById("login-username").value;
+        let password = document.getElementById("login-password").value;
+        let message = document.getElementById("login-message");
+
+        const savedUser = localStorage.getItem("savedUser");
+        const savedPass = localStorage.getItem("savedPass");
+
+        const successSound = document.getElementById("successSound");
+        const errorSound = document.getElementById("errorSound");
+
+        if (!savedUser || !savedPass) {
+            message.style.color = "orange";
+            message.textContent = "No account found — please create one.";
+            showSignInForm(); 
+            return;
+        }
+
+        if (username === savedUser && password === savedPass) {
+            message.style.color = "white";
+            message.textContent = `Welcome, ${username}! Redirecting...`;
+            successSound.play().catch(()=>{});
+
+            // Redirect to home.html after short delay
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 800);
+
+        } else {
+            message.style.color = "red";
+            message.textContent = "Incorrect username or password!";
+            errorSound.play().catch(()=>{});
+        }
+    }
+
+    // --- SHOW/HIDE ACCOUNT CREATION ---
+    function showSignInForm() {
+        document.getElementById("signin-box").style.display = "block";
+    }
+    function closeSignInForm() {
+        document.getElementById("signin-box").style.display = "none";
+    }
+
+    // --- CREATE ACCOUNT ---
+    function register() {
+        let user = document.getElementById("new-username").value;
+        let pass = document.getElementById("new-password").value;
+        let msg = document.getElementById("login-message");
+
+        if (user === "" || pass === "") {
+            msg.style.color = "red";
+            msg.textContent = "Please fill out all fields!";
+            return;
+        }
+
+        localStorage.setItem("savedUser", user);
+        localStorage.setItem("savedPass", pass);
+
+        msg.style.color = "white";
+        msg.textContent = `Account created! Welcome, ${user}!`;
+        closeSignInForm();
+    }
+
+    // --- MUSIC TOGGLE ---
+    function toggleMusic() {
+        const bgMusic = document.getElementById("bgMusic");
+        const btn = document.querySelector(".music-btn");
+
+        if (bgMusic.paused) {
+            bgMusic.play();
+            btn.style.filter = "brightness(1.2)"; 
+        } else {
+            bgMusic.pause();
+            btn.style.filter = "brightness(1)";
+        }
+    }
+
+    // --- FORGOT PASSWORD ---
+    function forgotPass() {
+        document.getElementById("forgot-box").classList.add("show");
+    }
+    function closeForgot() {
+        document.getElementById("forgot-box").classList.remove("show");
+    }
+    function sendReset() {
+        const user = document.getElementById("forgotUser").value;
+        const msg = document.getElementById("login-message");
+
+        if (user.trim() === "") {
+            msg.textContent = "Please type a username!";
+            return;
+        }
+
+        msg.textContent = "Reset link sent to " + user;
+        closeForgot();
+    }
+
+    // --- CLICK SOUNDS ---
+    const clickSounds = [
+        new Audio("THIS IS THE END - AUDIO FROM JAYUZUMI.COM.mp3"),
+        new Audio("THERE IS NO HOPE - AUDIO FROM JAYUZUMI.COM.mp3"),
+        new Audio("JUST ONE LAST THING - AUDIO FROM JAYUZUMI.COM.mp3"),
+        new Audio("DROWN IN DESPAIR - AUDIO FROM JAYUZUMI.COM.mp3")
+    ];
+
+    let currentClick = 0;
+    let isClickPlaying = false;
+
+    document.addEventListener("click", function(e) {
+        if (e.target.tagName.toLowerCase() === "button" || e.target.classList.contains("music-btn")) return;
+        if (isClickPlaying) return;
+
+        const sound = clickSounds[currentClick];
+        isClickPlaying = true;
+        sound.currentTime = 0;
+        sound.play();
+
+        sound.onended = () => {
+            isClickPlaying = false;
+            currentClick++;
+            if (currentClick >= clickSounds.length) currentClick = 0; 
+        };
+    });
+  </script>
+
+</body>
+</html>
